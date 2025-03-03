@@ -1,10 +1,12 @@
 <template>
   <div>
-    <!--   <router-link :to="pkmnPath" class="card"> -->
-    <div>
-      <h2>{{ school.name }}</h2>
-    </div>
-    <!--     </router-link> -->
+    <router-link :to="pkmnPath" class="card">
+      <div>
+        <h2>{{ school.dbn }}</h2>
+        <h2>{{ school.school_name }}</h2>
+        <h5>Click for More Information</h5>
+      </div>
+    </router-link>
   </div>
 </template>
 
@@ -13,7 +15,6 @@ import { computed } from 'vue'
 
 const props = defineProps({
   school: Object,
-  name: String,
 })
 const pkmnPath = computed(() => {
   return `/pokemon/${props.id}`
@@ -21,5 +22,3 @@ const pkmnPath = computed(() => {
 </script>
 
 <style lang="scss" scoped></style>
-
-https://data.cityofnewyork.us/resource/f9bf-2cp4.json
