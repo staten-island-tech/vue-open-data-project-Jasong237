@@ -1,12 +1,14 @@
 <template>
   <div>
-    <router-link :to="pkmnPath" class="card">
+    <div class="card">
       <div>
         <h2>{{ school.dbn }}</h2>
         <h2>{{ school.school_name }}</h2>
-        <h5>Click for More Information</h5>
+        <router-link :to="schoolInfo">
+          <h5>Click for More Information</h5>
+        </router-link>
       </div>
-    </router-link>
+    </div>
   </div>
 </template>
 
@@ -15,9 +17,10 @@ import { computed } from 'vue'
 
 const props = defineProps({
   school: Object,
+  dbn: Number,
 })
-const pkmnPath = computed(() => {
-  return `/pokemon/${props.id}`
+const schoolInfo = computed(() => {
+  return `/school/${props.dbn}`
 })
 </script>
 

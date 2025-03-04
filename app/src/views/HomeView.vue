@@ -1,5 +1,5 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import TheWelcome from '../components/SchoolList.vue'
 // https://data.cityofnewyork.us/resource/f9bf-2cp4.json?dbn=01M292
 import { ref, onMounted } from 'vue'
 
