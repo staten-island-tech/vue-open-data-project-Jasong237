@@ -6,7 +6,6 @@
       <h1>{{ school.num_of_sat_test_takers }}</h1>
     </div>
     <ChartStyle :data="chartData" />
-    
   </div>
 </template>
 
@@ -15,16 +14,9 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import ChartStyle from '../components/ChartStyle.vue'
 
-const chartData = {
-  labels: ['Red', 'Blue', 'Yellow'],
-  datasets: [
-    {
-      label: 'Votes',
-      data: [12, 19, 3],
-      backgroundColor: ['red', 'blue', 'yellow'],
-    },
-  ],
-}
+let readScore = ref(23)
+let mathScore = ref(0)
+let writeScore = ref(0)
 
 const props = defineProps({
   school: Object,
@@ -45,6 +37,7 @@ async function getSchools() {
       const data = await res.json()
       school.value = data
       console.log(school.value)
+      changeValues()
     }
   } catch (error) {
     alert(error)
@@ -55,7 +48,23 @@ onMounted(() => {
   getSchools()
 })
 
+function changeValues() {
+  readScore.value = school.value[0].sat_critical_reading_avg_score
+  mathScore.value = school.value[0].sat_math_avg_score
+  writeScore.value = school.value[0].sat_writing_avg_score
+  console.log(readScore.value)
+}
 
+const chartData = {
+  labels: ['Reading Score', 'Math Score', 'Writing Score'],
+  datasets: [
+    {
+      label: 'Average Points',
+      data: [`${route.params.sat_writing_avg_score}`, 2, 20],
+      backgroundColor: ['red', 'blue', 'green'],
+    },
+  ],
+}
 </script>
 
 <style lang="scss" scoped></style>
