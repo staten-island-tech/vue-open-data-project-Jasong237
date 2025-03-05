@@ -5,12 +5,26 @@
       <h1>{{ school.school_name }}</h1>
       <h1>{{ school.num_of_sat_test_takers }}</h1>
     </div>
+    <ChartStyle :data="chartData" />
+    
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import ChartStyle from '../components/ChartStyle.vue'
+
+const chartData = {
+  labels: ['Red', 'Blue', 'Yellow'],
+  datasets: [
+    {
+      label: 'Votes',
+      data: [12, 19, 3],
+      backgroundColor: ['red', 'blue', 'yellow'],
+    },
+  ],
+}
 
 const props = defineProps({
   school: Object,
@@ -40,6 +54,8 @@ async function getSchools() {
 onMounted(() => {
   getSchools()
 })
+
+
 </script>
 
 <style lang="scss" scoped></style>

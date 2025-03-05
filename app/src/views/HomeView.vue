@@ -35,7 +35,6 @@ onMounted(() => {
         :key="school"
         :school="school"
         :dbn="school.dbn"
-        :name="school_name"
       />
     </div>
   </main>
