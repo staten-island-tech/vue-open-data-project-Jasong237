@@ -5,18 +5,14 @@
       <h1>{{ school.school_name }}</h1>
       <h1>{{ school.num_of_sat_test_takers }}</h1>
     </div>
-    <ChartStyle :data="chartData" />
+    <BarChart />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import ChartStyle from '../components/ChartStyle.vue'
-
-let readScore = ref(23)
-let mathScore = ref(0)
-let writeScore = ref(0)
+import BarChart from '../components/ChartStyle.vue'
 
 const props = defineProps({
   school: Object,
@@ -48,22 +44,16 @@ onMounted(() => {
   getSchools()
 })
 
-function changeValues() {
-  readScore.value = school.value[0].sat_critical_reading_avg_score
-  mathScore.value = school.value[0].sat_math_avg_score
-  writeScore.value = school.value[0].sat_writing_avg_score
-  console.log(readScore.value)
-}
+let readScore = ref(`${school.value[0]}`)
+let mathScore = ref(0)
+let writeScore = ref(0)
 
-const chartData = {
-  labels: ['Reading Score', 'Math Score', 'Writing Score'],
-  datasets: [
-    {
-      label: 'Average Points',
-      data: [`${route.params.sat_writing_avg_score}`, 2, 20],
-      backgroundColor: ['red', 'blue', 'green'],
-    },
-  ],
+function changeValues() {
+  console.log(school.value)
+  console.log(school.value[0].sat_writing_avg_score)
+  /*   readScore.value = school.value[0].sat_critical_reading_avg_score
+  mathScore.value = school.value[0].sat_math_avg_score
+  writeScore.value = school.value[0].sat_writing_avg_score */
 }
 </script>
 

@@ -18,7 +18,7 @@ import { computed } from 'vue'
 const props = defineProps({
   school: Object,
   dbn: String,
-  sat_writing_avg_score: Number,
+  sat_writing_avg_score: String,
 })
 const schoolInfo = computed(() => {
   return `/school/${props.dbn}`

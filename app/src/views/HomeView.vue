@@ -35,6 +35,7 @@ onMounted(() => {
         :key="school"
         :school="school"
         :dbn="school.dbn"
+        :sat_writing_avg_score="school.sat_writing_avg_score"
       />
     </div>
   </main>

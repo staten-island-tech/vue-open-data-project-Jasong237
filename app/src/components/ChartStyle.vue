@@ -1,32 +1,34 @@
 <template>
-  <canvas ref="chartCanvas"></canvas>
+  <Bar id="my-chart-id" :options="chartOptions" :data="chartData" />
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
-import Chart from 'chart.js/auto'
+<script>
+import { Bar } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+} from 'chart.js'
 
-const props = defineProps({
-  data: Object,
-})
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-const chartCanvas = ref(null)
-
-const renderChart = () => {
-  if (chartCanvas.value) {
-    new Chart(chartCanvas.value, {
-      type: 'polarArea',
-      data: props.data,
-      options: {
+export default {
+  name: 'BarChart',
+  components: { Bar },
+  data() {
+    return {
+      chartData: {
+        labels: ['January', 'February', 'March'],
+        datasets: [{ data: [40, 20, 12] }],
+      },
+      chartOptions: {
         responsive: true,
       },
-    })
-  }
+    }
+  },
 }
-
-onMounted(() => {
-  renderChart()
-})
 </script>
-
-<style lang="scss" scoped></style>
