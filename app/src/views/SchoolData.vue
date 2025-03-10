@@ -5,17 +5,20 @@
       <h1>{{ school.school_name }}</h1>
       <h1>{{ school.num_of_sat_test_takers }}</h1>
     </div>
-    <BarChart />
+    <PolarArea id="my-chart-id" :options="chartOptions" :data="chartData" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import BarChart from '../components/ChartStyle.vue'
+import PolarArea from '../components/ChartStyle.vue'
 
 const props = defineProps({
   school: Object,
+  readScore: Number,
+  mathScore: Number,
+  writeScore: Number,
 })
 
 const route = useRoute()
@@ -44,9 +47,9 @@ onMounted(() => {
   getSchools()
 })
 
-let readScore = ref(`${school.value[0]}`)
-let mathScore = ref(0)
-let writeScore = ref(0)
+let readScore = ref(10)
+let mathScore = ref(27)
+let writeScore = ref(34)
 
 function changeValues() {
   console.log(school.value)
