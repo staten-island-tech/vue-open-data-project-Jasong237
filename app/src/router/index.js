@@ -10,7 +10,7 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/school/:dbn',
+      path: '/name/:nm',
       name: 'SchoolData',
       component: () => import('../views/SchoolData.vue'),
     },

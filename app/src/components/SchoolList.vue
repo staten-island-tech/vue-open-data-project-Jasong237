@@ -2,9 +2,8 @@
   <div>
     <div class="card">
       <div>
-        <h2>{{ school.dbn }}</h2>
-        <h2>{{ school.school_name }}</h2>
-        <router-link :to="schoolInfo">
+        <h2>{{ name.nm }}</h2>
+        <router-link :to="nameInfo">
           <h5>Click for More Information</h5>
         </router-link>
       </div>
@@ -16,12 +15,11 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  school: Object,
-  dbn: String,
-  sat_writing_avg_score: String,
+  name: Object,
+  nm: String,
 })
-const schoolInfo = computed(() => {
-  return `/school/${props.dbn}`
+const nameInfo = computed(() => {
+  return `/name/${props.name.nm}`
 })
 </script>
 

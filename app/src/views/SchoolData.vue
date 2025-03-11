@@ -1,43 +1,38 @@
 <template>
   <div>
-    <div v-for="school in school" :key="school.dbn">
-      <h1>{{ school.dbn }}</h1>
-      <h1>{{ school.school_name }}</h1>
-      <h1>{{ school.num_of_sat_test_takers }}</h1>
-    </div> 
-    <h1>School Data</h1>
-    <PolarChart />
+    <h1>Data</h1>
+    <div v-for="name in name" :key="name">
+      <h1>{{ name.nm }}</h1>
+    </div>
+    <Bar />
   </div>
 </template>
 
 <script setup>
-import PolarChart from '../components/ChartStyle.vue'
- import { ref, onMounted } from 'vue'
+import Bar from '../components/ChartStyle.vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 const props = defineProps({
-  school: Object,
-  readScore: Number,
-  mathScore: Number,
-  writeScore: Number,
+  name: Object,
+  nm: String,
 })
 
 const route = useRoute()
-const school = ref('')
+const name = ref('')
 
-async function getSchools() {
+async function getName() {
   try {
     const res = await fetch(
-      `https://data.cityofnewyork.us/resource/f9bf-2cp4.json?dbn=${route.params.dbn}`,
+      `https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013&nm=${route.params.nm}`,
     )
     console.log('response', res)
     if (res.status > 200) {
       throw new Error(res)
     } else {
       const data = await res.json()
-      school.value = data
-      console.log(school.value)
-      changeValues()
+      name.value = data
+      console.log(name.value)
     }
   } catch (error) {
     alert(error)
@@ -45,20 +40,8 @@ async function getSchools() {
 }
 
 onMounted(() => {
-  getSchools()
+  getName()
 })
-
-let readScore = ref(10)
-let mathScore = ref(27)
-let writeScore = ref(34)
-
-function changeValues() {
-  console.log(school.value)
-  console.log(school.value[0].sat_writing_avg_score)
-  readScore.value = school.value[0].sat_critical_reading_avg_score
-  mathScore.value = school.value[0].sat_math_avg_score
-  writeScore.value = school.value[0].sat_writing_avg_score
-} 
 </script>
 
 <style lang="scss" scoped></style>

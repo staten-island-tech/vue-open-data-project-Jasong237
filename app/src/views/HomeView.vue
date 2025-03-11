@@ -3,25 +3,27 @@ import TheWelcome from '../components/SchoolList.vue'
 // https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013&nm=Chloe
 import { ref, onMounted } from 'vue'
 
-let schools = ref('')
+let names = ref('')
 
-async function getSchools() {
+async function getNames() {
   try {
-    const res = await fetch('https://data.cityofnewyork.us/resource/f9bf-2cp4.json?$limit=5')
+    const res = await fetch(
+      'https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013&$limit=5',
+    )
     console.log('response', res)
     if (res.status > 200) {
       throw new Error(res)
     } else {
       const data = await res.json()
-      schools.value = data
-      console.log(schools.value)
+      names.value = data
+      console.log(names.value)
     }
   } catch (error) {
     alert(error)
   }
 }
 onMounted(() => {
-  getSchools()
+  getNames()
 })
 </script>
 
@@ -29,14 +31,7 @@ onMounted(() => {
   <main>
     <h1>Hello</h1>
     <div class="container">
-      <TheWelcome
-        class="card"
-        v-for="school in schools"
-        :key="school"
-        :school="school"
-        :dbn="school.dbn"
-        :sat_writing_avg_score="school.sat_writing_avg_score"
-      />
+      <TheWelcome class="card" v-for="name in names" :key="name" :name="name" :nm="nm" />
     </div>
   </main>
 </template>
