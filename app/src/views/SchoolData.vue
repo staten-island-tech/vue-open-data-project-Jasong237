@@ -4,15 +4,16 @@
       <h1>{{ school.dbn }}</h1>
       <h1>{{ school.school_name }}</h1>
       <h1>{{ school.num_of_sat_test_takers }}</h1>
-    </div>
-    <PolarArea id="my-chart-id" :options="chartOptions" :data="chartData" />
+    </div> 
+    <h1>School Data</h1>
+    <PolarChart />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import PolarChart from '../components/ChartStyle.vue'
+ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import PolarArea from '../components/ChartStyle.vue'
 
 const props = defineProps({
   school: Object,
@@ -54,10 +55,10 @@ let writeScore = ref(34)
 function changeValues() {
   console.log(school.value)
   console.log(school.value[0].sat_writing_avg_score)
-  /*   readScore.value = school.value[0].sat_critical_reading_avg_score
+  readScore.value = school.value[0].sat_critical_reading_avg_score
   mathScore.value = school.value[0].sat_math_avg_score
-  writeScore.value = school.value[0].sat_writing_avg_score */
-}
+  writeScore.value = school.value[0].sat_writing_avg_score
+} 
 </script>
 
 <style lang="scss" scoped></style>

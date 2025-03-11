@@ -1,6 +1,6 @@
 <script setup>
 import TheWelcome from '../components/SchoolList.vue'
-// https://data.cityofnewyork.us/resource/f9bf-2cp4.json?dbn=01M292
+// https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013&nm=Chloe
 import { ref, onMounted } from 'vue'
 
 let schools = ref('')
