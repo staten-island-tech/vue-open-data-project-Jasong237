@@ -1,47 +1,36 @@
 <template>
   <div>
-    <h1>Data</h1>
-    <div v-for="name in name" :key="name">
-      <h1>{{ name.nm }}</h1>
-    </div>
-    <Bar />
+    <h1>Data for {{ route.params.nm }}</h1>
+    <router-link :to="goBack">
+      <h5> Back </h5>
+    </router-link>
+    <button @click="toggleVisibility">{{ visible ? 'Hide' : 'Show' }} Graph</button>
+    
+
+    <PolarArea v-if="visible" />
   </div>
 </template>
 
 <script setup>
-import Bar from '../components/ChartStyle.vue'
-import { ref, onMounted } from 'vue'
+import PolarArea from '../components/ChartStyle.vue'
 import { useRoute } from 'vue-router'
-
-const props = defineProps({
-  name: Object,
-  nm: String,
-})
+import { ref, computed } from 'vue'
 
 const route = useRoute()
-const name = ref('')
-
-async function getName() {
-  try {
-    const res = await fetch(
-      `https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013&nm=${route.params.nm}`,
-    )
-    console.log('response', res)
-    if (res.status > 200) {
-      throw new Error(res)
-    } else {
-      const data = await res.json()
-      name.value = data
-      console.log(name.value)
-    }
-  } catch (error) {
-    alert(error)
-  }
-}
-
-onMounted(() => {
-  getName()
+const visible = ref(true) 
+const goBack = computed(() => {
+  return `/`
 })
+
+
+const toggleVisibility = () => {
+  visible.value = !visible.value
+}
 </script>
 
-<style lang="scss" scoped></style>
+
+<style>
+button {
+background-color: green;
+}
+ </style>
