@@ -1,5 +1,6 @@
 <script setup>
-import TheWelcome from '../components/SchoolList.vue'
+import SchoolList from '../components/SchoolList.vue'
+
 // https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013&nm=Chloe
 import { ref, onMounted } from 'vue'
 
@@ -31,8 +32,11 @@ onMounted(() => {
   <main>
     <h1>Hello</h1>
     <div class="container">
-      <TheWelcome class="card" v-for="name in names" :key="name" :name="name" :nm="nm" />
+      <SchoolList class="card" v-for="name in names" :key="name" :name="name" :nm="nm" />
     </div>
+    <router-link to="/test">
+      Hello
+    </router-link>
   </main>
 </template>
 

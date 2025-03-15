@@ -4,7 +4,7 @@
       <div>
         <h2>{{ name.nm }}</h2>
         <router-link :to="nameInfo">
-          <h5>Click for More Information</h5>
+          Click for More Information
         </router-link>
       </div>
     </div>

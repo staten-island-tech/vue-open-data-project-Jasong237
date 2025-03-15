@@ -7,14 +7,7 @@
 <script>
 import { useRoute } from 'vue-router'
 import { PolarArea } from 'vue-chartjs'
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  RadialLinearScale,
-  ArcElement,
-} from 'chart.js'
+import { Chart as ChartJS, Title, Tooltip, Legend, RadialLinearScale, ArcElement } from 'chart.js'
 
 ChartJS.register(Title, Tooltip, Legend, RadialLinearScale, ArcElement)
 
@@ -23,7 +16,7 @@ export default {
   components: { PolarArea },
   data: () => ({
     loaded: false,
-    chartData: null
+    chartData: null,
   }),
   async mounted() {
     const route = useRoute()
@@ -39,15 +32,15 @@ export default {
       } else {
         const data = await res.json()
         console.log(data)
+
+        const uniqueEthnicities = data.filter(
+          (item, index, self) => index === self.findIndex((t) => t.ethcty === item.ethcty),
+        )
+
+        const labels = uniqueEthnicities.map((item) => item.ethcty)
+        const counts = uniqueEthnicities.map((item) => parseInt(item.cnt, 10))
+        const colors = labels.map(() => getRandomColor())
         
-        const uniqueEthnicities = data.filter((item, index, self) =>
-          index === self.findIndex((t) => t.ethcty === item.ethcty)
-        );
-
-        const labels = uniqueEthnicities.map(item => item.ethcty); 
-        const counts = uniqueEthnicities.map(item => parseInt(item.cnt, 10)); 
-        const colors = labels.map(() => getRandomColor());
-
         this.chartData = {
           labels: labels,
           datasets: [
@@ -69,9 +62,9 @@ export default {
 }
 
 function getRandomColor() {
-  const r = Math.floor(Math.random() * 256);
-  const g = Math.floor(Math.random() * 256);
-  const b = Math.floor(Math.random() * 256);
-  return `rgb(${r}, ${g}, ${b})`;
+  const r = Math.floor(Math.random() * 256)
+  const g = Math.floor(Math.random() * 256)
+  const b = Math.floor(Math.random() * 256)
+  return `rgb(${r}, ${g}, ${b})`
 }
 </script>
