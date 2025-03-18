@@ -32,11 +32,9 @@ onMounted(() => {
   <main>
     <h1>Hello</h1>
     <div class="container">
-      <SchoolList class="card" v-for="name in names" :key="name" :name="name" :nm="nm" />
+      <SchoolList class="card" v-for="name in names" :key="name" :name="name" />
     </div>
-    <router-link to="/test">
-      Hello
-    </router-link>
+    <router-link to="/test"> Hello </router-link>
   </main>
 </template>
 
