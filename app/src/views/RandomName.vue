@@ -1,5 +1,6 @@
 <template>
   <div>
+    <RankStyle v-for="set in sets" :key="set" />
     <h1>Random Name: {{ displayName }}</h1>
     <button @click="startRandomizer">Randomize Name</button>
     <div v-if="visible">
@@ -10,13 +11,17 @@
 
 <script>
 import { ref, onMounted, computed } from 'vue'
-
+import RankStyle from '@/components/RankStyle.vue'
 export default {
   name: 'RandomName',
+  components: {
+    RankStyle,
+  },
   setup() {
     const visible = ref(false)
     const names = ref([])
     const displayName = ref('')
+    const sets = ref([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]])
     let intervalId = null
 
     async function getNames() {
@@ -67,7 +72,6 @@ export default {
       getNames()
       displayName.value = sessionStorage.getItem(displayName)
       visible.value = displayName.length > 0
-      console.log(visible.true)
       sessionStorage.clear()
     })
 
@@ -76,6 +80,10 @@ export default {
       startRandomizer,
       nameInfo,
       visible,
+      components: {
+        RankStyle,
+      },
+      sets,
     }
   },
 }
