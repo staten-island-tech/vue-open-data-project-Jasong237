@@ -10,7 +10,7 @@
 
 <script setup>
 const props = defineProps({
-  set: Object,
+  set: Number,
 })
 </script>
 

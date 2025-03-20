@@ -2,18 +2,15 @@
   <div>
     <h1>Data for {{ route.params.nm }}</h1>
     <div>
-    <router-link :to="goBack">
-    Back
-    </router-link>
-  </div>
-    <button @click="toggleVisibility">{{ visible ? 'Additional Info' : 'Main Info' }} </button>
+      <router-link :to="goBack"> Back </router-link>
+    </div>
+    <button @click="toggleVisibility">{{ visible ? 'Additional Info' : 'Main Info' }}</button>
 
     <PolarArea v-if="visible" />
     <div v-if="invisible">
-      <h2> Total Amt of {{ route.params.nm }}s: {{ count }} </h2>      
-      <h5> ** Note that the smaller the bar, the higher rank it is</h5>
+      <h2>Total Amt of {{ route.params.nm }}s: {{ count }}</h2>
+      <h5>** Note that the smaller the bar, the higher rank it is</h5>
       <BarChart />
-
     </div>
   </div>
 </template>
@@ -50,36 +47,33 @@ async function getStats() {
       const data = await res.json()
       console.log(data)
       const uniqueEthnicities = data.filter(
-          (item, index, self) => index === self.findIndex((t) => t.ethcty === item.ethcty),
-        )
-        console.log(uniqueEthnicities)
+        (item, index, self) => index === self.findIndex((t) => t.ethcty === item.ethcty),
+      )
+      console.log(uniqueEthnicities)
       countAll(uniqueEthnicities)
       checkRanks(uniqueEthnicities)
     }
-
   } catch (error) {
     alert(error)
   }
 }
 onMounted(() => {
   getStats()
-
 })
 
-function countAll(e){
-  for (let i = 0; i < e.length; i++){
-           count.value = count.value + Number(e[i].cnt)
-        } 
-        console.log(count.value)
+function countAll(e) {
+  for (let i = 0; i < e.length; i++) {
+    count.value = count.value + Number(e[i].cnt)
+  }
+  console.log(count.value)
 }
 
-function checkRanks(e){
-  for (let i = 0; i < e.length; i++){
-  console.log(e[i])
+function checkRanks(e) {
+  for (let i = 0; i < e.length; i++) {
+    console.log(e[i])
   }
   console.log(ranks.value)
 }
-
 </script>
 
 <style>

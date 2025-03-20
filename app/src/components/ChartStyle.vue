@@ -40,7 +40,7 @@ export default {
         const labels = uniqueEthnicities.map((item) => item.ethcty)
         const counts = uniqueEthnicities.map((item) => parseInt(item.cnt, 10))
         const colors = labels.map(() => getRandomColor())
-        
+
         this.chartData = {
           labels: labels,
           datasets: [

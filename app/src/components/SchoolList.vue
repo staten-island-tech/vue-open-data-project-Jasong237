@@ -3,9 +3,7 @@
     <div class="card">
       <div>
         <h2>{{ name.nm }}</h2>
-        <router-link :to="nameInfo">
-          Click for More Information
-        </router-link>
+        <router-link :to="nameInfo"> Click for More Information </router-link>
       </div>
     </div>
   </div>
