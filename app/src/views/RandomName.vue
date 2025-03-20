@@ -1,14 +1,3 @@
-<template>
-  <div>
-    <RankStyle v-for="rank in sets" :key="rank" :set="rank" />
-    <h1>Random Name: {{ displayName }}</h1>
-    <button @click="startRandomizer">Randomize Name</button>
-    <div v-if="visible">
-      <router-link :to="nameInfo"> Hello </router-link>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import RankStyle from '@/components/RankStyle.vue'
@@ -16,7 +5,7 @@ import RankStyle from '@/components/RankStyle.vue'
 const visible = ref(false)
 const names = ref([])
 const displayName = ref('')
-const sets = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+const sets = ref(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'])
 let intervalId = null
 
 async function getNames() {
@@ -45,6 +34,8 @@ function startRandomizer() {
     const finalIndex = Math.floor(Math.random() * names.value.length)
     displayName.value = names.value[finalIndex].nm
     visible.value = true
+    sessionStorage.setItem(displayName, names.value[finalIndex].nm)
+    console.log(displayName.value)
   }, 2000)
 }
 
@@ -58,5 +49,28 @@ const nameInfo = computed(() => {
 
 onMounted(() => {
   getNames()
+  displayName.value = sessionStorage.getItem(displayName)
 })
+
+function pushName() {
+  console.log(displayName.value, index)
+}
+console.log(sets.value[0])
 </script>
+
+<template>
+  <div>
+    <!--     <div v-for="(set, index) in sets" :key="set" :id="index + 1">
+      <h1>{{ set }}</h1>
+      <button @click="pushName(index)">Hey</button>
+    </div> -->
+    <RankStyle v-for="(rank, index) in sets" :key="rank" :set="rank" :id="index">
+      <h1>Hello</h1>
+    </RankStyle>
+    <h1>Random Name: {{ displayName }}</h1>
+    <button @click="startRandomizer">Randomize Name</button>
+    <div v-if="visible">
+      <router-link :to="nameInfo"> Hello </router-link>
+    </div>
+  </div>
+</template>
