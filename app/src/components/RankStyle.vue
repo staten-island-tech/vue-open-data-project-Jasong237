@@ -16,7 +16,6 @@ const props = defineProps({
 const emit = defineEmits(['updateSet'])
 
 function updateSet() {
-
   emit('updateSet', props.id)
 }
 </script>
