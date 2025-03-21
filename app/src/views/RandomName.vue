@@ -13,6 +13,7 @@
       <router-link :to="nameInfo"> Hello </router-link>
     </div>
     <button @click="clearGame()">Hey</button>
+    <router-link v-if="gameEnd" to="/results"> End Game</router-link>
   </div>
 </template>
 
@@ -21,9 +22,12 @@ import { ref, onMounted, computed } from 'vue'
 import RankStyle from '@/components/RankStyle.vue'
 
 const visible = ref(false)
+const gameEnd = ref(false)
 const names = ref([])
 const displayName = ref('')
-const sets = ref(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'])
+const sets = ref(['1', '2', '3', '4', '5'])
+const nameChoices = ref([])
+const counts = ref([])
 let intervalId = null
 let entries = ref(0)
 
@@ -61,10 +65,10 @@ function startRandomizer() {
 
 function updateSet(id) {
   visible.value
-    ? displayName.value
-      ? nextOptions(id)
-      : alert('Remember to spin for a name before you click a rank!')
-    : console.log('filler1')
+  ? displayName.value
+    ? nextOptions(id)
+    : alert('Remember to spin for a name before you click a rank!')
+  : console.log('filler1')
 }
 
 function nextOptions(id) {
@@ -89,11 +93,14 @@ function pushName(id) {
   } else {
     sets.value[id] = displayName.value
     entries.value = entries.value + 1
-    console.log(entries.value)
+    console.log("The entries", entries.value)
+    sessionStorage.setItem('entries', entries.value)
     checkProgress()
+    nameChoices.value.push(displayName.value)
+    sessionStorage.setItem('nameChoices', JSON.stringify(nameChoices.value))
   }
   sessionStorage.setItem('ranks', JSON.stringify(sets.value))
-  displayName.value = null
+  displayName.value = ""
   visible.value = false
   sessionStorage.setItem('displayName', displayName.value)
   sessionStorage.setItem('visible', visible.value)
@@ -107,20 +114,29 @@ const nameInfo = computed(() => {
 })
 
 function checkProgress() {
-  if (entries.value === 5) {
+  if (entries.value === 1) {
     alert('Game over!')
+    gameEnd.value = true
+    sessionStorage.setItem('gameEnd', gameEnd.value)
   }
+
 }
 
 onMounted(() => {
   getNames()
-  displayName.value = sessionStorage.getItem('displayName')
+  displayName.value = sessionStorage.getItem('displayName') 
   const storedRanks = sessionStorage.getItem('ranks')
   storedRanks ? (sets.value = JSON.parse(storedRanks)) : console.log('filler')
   visible.value = sessionStorage.getItem('visible')
+  gameEnd.value = sessionStorage.getItem('gameEnd')
+  entries.value = Number(sessionStorage.getItem('entries'))
+  const theNames = sessionStorage.getItem('nameChoices')
+  theNames ? (nameChoices.value = JSON.parse(theNames)) : console.log('filler')
+  console.log(nameChoices.value, "Names")
 })
 
 function clearGame() {
   sessionStorage.clear()
 }
+
 </script>
