@@ -1,30 +1,22 @@
 <template>
   <div>
-    <div class="card">
-      <div>
-        <h2>{{ set }}</h2>
-        <h2>{{ id }}</h2>
-        <button @click="pushName()">Hello</button>
-      </div>
-    </div>
+    <h1>{{ set }}</h1>
+    <button @click="updateSet">Update</button>
   </div>
 </template>
 
 <script setup>
-import displayName from '@/views/RandomName.vue'
-import sets from '@/views/RandomName.vue'
+import { defineProps, defineEmits } from 'vue'
+
 const props = defineProps({
   set: String,
   id: Number,
 })
 
-function pushName() {
-  console.log(sets.value[props.id])
-  console.log(sessionStorage.getItem(displayName))
-  console.log(displayName.value)
-  sets[props.id] = sessionStorage.getItem(displayName)
-  console.log(sets[props.id].value)
+const emit = defineEmits(['updateSet'])
+
+function updateSet() {
+
+  emit('updateSet', props.id)
 }
 </script>
-
-<style lang="scss" scoped></style>
