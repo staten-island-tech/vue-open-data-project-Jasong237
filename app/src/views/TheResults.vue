@@ -1,15 +1,18 @@
 <template>
   <div>
-    <button @click="restartGame">Restart Game</button>
-    <button @click="changeVisiblity">Check Real Ranking</button>
+    <button class="bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-800 rounded" @click="restartGame">Restart Game</button>
+    <button class="bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-800 rounded" @click="changeVisiblity">Check Real Ranking</button>
     <div v-if="visible">
       <h1>Your ranking</h1>
+      <h1> 1st Place is on the left, 10th place is on the right </h1>
       <BarChart :ranks="ranks" :counts="counts" />
     </div>
     <div v-if="!visible">
       <h1>Actual ranking</h1>
+      <h1> 1st Place is on the left, 10th place is on the right </h1>
       <BarChart :ranks="sortedRanks" :counts="sortedCounts" />
     </div>
+
   </div>
 </template>
 

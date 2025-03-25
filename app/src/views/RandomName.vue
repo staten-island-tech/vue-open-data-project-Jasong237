@@ -12,7 +12,7 @@
     <div v-if="visible">
       <router-link class="bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded" :to="nameInfo"> Check Stats </router-link>
     </div>
-    <router-link v-if="gameEnd" to="/results"> End Game</router-link>
+    <router-link class="bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded" v-if="gameEnd" to="/results"> End Game</router-link>
   </div>
 </template>
 
