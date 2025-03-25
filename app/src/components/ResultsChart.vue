@@ -23,7 +23,7 @@ export default {
   components: { Bar },
   props: {
     ranks: Array,
-    counts: Array, 
+    counts: Array,
   },
   data: () => ({
     loaded: false,

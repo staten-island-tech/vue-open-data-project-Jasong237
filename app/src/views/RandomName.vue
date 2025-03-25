@@ -8,9 +8,9 @@
       @updateSet="updateSet"
     />
     <h1>Random Name: {{ displayName }}</h1>
-    <button v-if="!visible" @click="startRandomizer">Randomize Name</button>
+    <button class="bg-green-700 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-700 rounded" v-if="!visible" @click="startRandomizer">Randomize Name</button>
     <div v-if="visible">
-      <router-link :to="nameInfo"> Hello </router-link>
+      <router-link class="bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded" :to="nameInfo"> Check Stats </router-link>
     </div>
     <router-link v-if="gameEnd" to="/results"> End Game</router-link>
   </div>
@@ -74,9 +74,9 @@ async function addTotal() {
     current.value = data
     console.log(current.value)
     const uniqueEthnicities = data.filter(
-        (item, index, self) => index === self.findIndex((t) => t.ethcty === item.ethcty),
-  )
-  countAll(uniqueEthnicities)
+      (item, index, self) => index === self.findIndex((t) => t.ethcty === item.ethcty),
+    )
+    countAll(uniqueEthnicities)
   } catch (error) {
     alert(error)
   }
@@ -86,14 +86,13 @@ function countAll(e) {
   for (let i = 0; i < e.length; i++) {
     amount.value = amount.value + Number(e[i].cnt)
   }
-  console.log(amount.value, "total amt")
-
+  console.log(amount.value, 'total amt')
 }
 
 function updateSet(id) {
-  visible.value || displayName.value
-      ? nextOptions(id)
-      : alert('Remember to spin for a name before you click a rank!')
+  visible.value && displayName.value
+    ? nextOptions(id)
+    : alert('Remember to spin for a name before you click a rank!')
 }
 
 function nextOptions(id) {
@@ -142,7 +141,7 @@ const nameInfo = computed(() => {
 })
 
 function checkProgress() {
-  if (entries.value === 10) {
+  if (entries.value === 5) {
     alert('Game over!')
     gameEnd.value = true
     sessionStorage.setItem('gameEnd', gameEnd.value)
@@ -164,5 +163,4 @@ onMounted(() => {
   theCounts ? (counts.value = JSON.parse(theCounts)) : console.log('filler')
   console.log(counts.value)
 })
-
 </script>
