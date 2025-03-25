@@ -8,11 +8,10 @@
       @updateSet="updateSet"
     />
     <h1>Random Name: {{ displayName }}</h1>
-    <button @click="startRandomizer">Randomize Name</button>
+    <button v-if="!visible" @click="startRandomizer">Randomize Name</button>
     <div v-if="visible">
       <router-link :to="nameInfo"> Hello </router-link>
     </div>
-    <button @click="clearGame()">Hey</button>
     <router-link v-if="gameEnd" to="/results"> End Game</router-link>
   </div>
 </template>
@@ -25,9 +24,9 @@ const visible = ref(false)
 const gameEnd = ref(false)
 const names = ref([])
 const displayName = ref('')
-const sets = ref(['1', '2', '3', '4', '5'])
+const sets = ref(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'])
 const nameChoices = ref([])
-const counts = ref([])
+const counts = ref(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'])
 let intervalId = null
 let entries = ref(0)
 
@@ -60,15 +59,41 @@ function startRandomizer() {
     console.log(displayName.value)
     visible.value = true
     sessionStorage.setItem('visible', visible.value)
+    addTotal()
   }, 2000)
+}
+const current = ref([])
+const amount = ref(0)
+async function addTotal() {
+  try {
+    const res = await fetch(
+      `https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013&nm=${displayName.value}`,
+    )
+    if (!res.ok) throw new Error(res.statusText)
+    const data = await res.json()
+    current.value = data
+    console.log(current.value)
+    const uniqueEthnicities = data.filter(
+        (item, index, self) => index === self.findIndex((t) => t.ethcty === item.ethcty),
+  )
+  countAll(uniqueEthnicities)
+  } catch (error) {
+    alert(error)
+  }
+}
+
+function countAll(e) {
+  for (let i = 0; i < e.length; i++) {
+    amount.value = amount.value + Number(e[i].cnt)
+  }
+  console.log(amount.value, "total amt")
+
 }
 
 function updateSet(id) {
-  visible.value
-  ? displayName.value
-    ? nextOptions(id)
-    : alert('Remember to spin for a name before you click a rank!')
-  : console.log('filler1')
+  visible.value || displayName.value
+      ? nextOptions(id)
+      : alert('Remember to spin for a name before you click a rank!')
 }
 
 function nextOptions(id) {
@@ -93,14 +118,17 @@ function pushName(id) {
   } else {
     sets.value[id] = displayName.value
     entries.value = entries.value + 1
-    console.log("The entries", entries.value)
+    console.log('The entries', entries.value)
     sessionStorage.setItem('entries', entries.value)
     checkProgress()
     nameChoices.value.push(displayName.value)
     sessionStorage.setItem('nameChoices', JSON.stringify(nameChoices.value))
+    counts.value[id] = amount.value
+    console.log(counts.value)
+    sessionStorage.setItem('counts', JSON.stringify(counts.value))
   }
   sessionStorage.setItem('ranks', JSON.stringify(sets.value))
-  displayName.value = ""
+  displayName.value = ''
   visible.value = false
   sessionStorage.setItem('displayName', displayName.value)
   sessionStorage.setItem('visible', visible.value)
@@ -114,17 +142,16 @@ const nameInfo = computed(() => {
 })
 
 function checkProgress() {
-  if (entries.value === 1) {
+  if (entries.value === 10) {
     alert('Game over!')
     gameEnd.value = true
     sessionStorage.setItem('gameEnd', gameEnd.value)
   }
-
 }
 
 onMounted(() => {
   getNames()
-  displayName.value = sessionStorage.getItem('displayName') 
+  displayName.value = sessionStorage.getItem('displayName')
   const storedRanks = sessionStorage.getItem('ranks')
   storedRanks ? (sets.value = JSON.parse(storedRanks)) : console.log('filler')
   visible.value = sessionStorage.getItem('visible')
@@ -132,11 +159,10 @@ onMounted(() => {
   entries.value = Number(sessionStorage.getItem('entries'))
   const theNames = sessionStorage.getItem('nameChoices')
   theNames ? (nameChoices.value = JSON.parse(theNames)) : console.log('filler')
-  console.log(nameChoices.value, "Names")
+  console.log(nameChoices.value, 'Names')
+  const theCounts = sessionStorage.getItem('counts')
+  theCounts ? (counts.value = JSON.parse(theCounts)) : console.log('filler')
+  console.log(counts.value)
 })
-
-function clearGame() {
-  sessionStorage.clear()
-}
 
 </script>
