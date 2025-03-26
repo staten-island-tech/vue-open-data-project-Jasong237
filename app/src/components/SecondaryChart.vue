@@ -59,7 +59,6 @@ export default {
             },
           ],
         }
-        console.log(this.chartData)
 
         this.loaded = true
       }

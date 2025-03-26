@@ -1,20 +1,37 @@
 <template>
-  <div>
-    <RankStyle
-      v-for="(rank, index) in sets"
-      :key="rank"
-      :set="rank"
-      :id="index"
-      @updateSet="updateSet"
-    />
-    <h1>Random Name: {{ displayName }}</h1>
-    <button class="bg-green-700 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-700 rounded" v-if="!visible" @click="startRandomizer">Randomize Name</button>
-    <div v-if="visible">
-      <router-link class="bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded" :to="nameInfo"> Check Stats </router-link>
+  <div class="pt-5 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-4xl p-4">
+      <h1 class="text-6xl text-center">Random Birth Name Tier List</h1>
+      <div class="flex flex-col items-center space-y-4">
+        <div v-for="(rank, index) in sets" :key="rank" class="w-full">
+          <RankStyle :set="rank" :id="index" @updateSet="updateSet" />
+        </div>
+      </div>
+
+      <h1 class="mt-60 text-3xl">Random Name: {{ displayName }}</h1>
+
+      <button v-if="!visible" @click="startRandomizer" class="text-green-600">
+        Randomize Name
+      </button>
+
+      <div v-if="visible" class="mt-4">
+        <router-link :to="nameInfo" class="text-green-600">
+          Check Stats
+        </router-link>
+      </div>
+      <div>
+      <router-link v-if="gameEnd" to="/results" class="mt-4 text-red-600">
+        End Game
+      </router-link>
     </div>
-    <router-link class="bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded" v-if="gameEnd" to="/results"> End Game</router-link>
+    </div>
   </div>
 </template>
+
+<style>
+
+</style>
+
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
@@ -56,7 +73,6 @@ function startRandomizer() {
     const finalIndex = Math.floor(Math.random() * names.value.length)
     displayName.value = names.value[finalIndex].nm
     sessionStorage.setItem('displayName', displayName.value)
-    console.log(displayName.value)
     visible.value = true
     sessionStorage.setItem('visible', visible.value)
     addTotal()
@@ -86,7 +102,6 @@ function countAll(e) {
   for (let i = 0; i < e.length; i++) {
     amount.value = amount.value + Number(e[i].cnt)
   }
-  console.log(amount.value, 'total amt')
 }
 
 function updateSet(id) {
@@ -96,9 +111,6 @@ function updateSet(id) {
 }
 
 function nextOptions(id) {
-  console.log(id)
-  console.log(displayName.value)
-  console.log(sets.value[id])
   Number(sets.value[id]) === id + 1 ? pushName(id) : alert('Dont put other names in!!')
 }
 
@@ -108,8 +120,6 @@ function pushName(id) {
   for (let i = 0; i < sets.value.length; i++) {
     if (sets.value[i] === displayName.value) {
       failsafe.value = true
-    } else {
-      console.log('Hello')
     }
   }
   if (failsafe.value === true) {
@@ -117,13 +127,11 @@ function pushName(id) {
   } else {
     sets.value[id] = displayName.value
     entries.value = entries.value + 1
-    console.log('The entries', entries.value)
     sessionStorage.setItem('entries', entries.value)
     checkProgress()
     nameChoices.value.push(displayName.value)
     sessionStorage.setItem('nameChoices', JSON.stringify(nameChoices.value))
     counts.value[id] = amount.value
-    console.log(counts.value)
     sessionStorage.setItem('counts', JSON.stringify(counts.value))
   }
   sessionStorage.setItem('ranks', JSON.stringify(sets.value))
@@ -141,7 +149,7 @@ const nameInfo = computed(() => {
 })
 
 function checkProgress() {
-  if (entries.value === 5) {
+  if (entries.value === 10) {
     alert('Game over!')
     gameEnd.value = true
     sessionStorage.setItem('gameEnd', gameEnd.value)
@@ -151,16 +159,21 @@ function checkProgress() {
 onMounted(() => {
   getNames()
   displayName.value = sessionStorage.getItem('displayName')
-  const storedRanks = sessionStorage.getItem('ranks')
-  storedRanks ? (sets.value = JSON.parse(storedRanks)) : console.log('filler')
-  visible.value = sessionStorage.getItem('visible')
-  gameEnd.value = sessionStorage.getItem('gameEnd')
-  entries.value = Number(sessionStorage.getItem('entries'))
-  const theNames = sessionStorage.getItem('nameChoices')
-  theNames ? (nameChoices.value = JSON.parse(theNames)) : console.log('filler')
-  console.log(nameChoices.value, 'Names')
-  const theCounts = sessionStorage.getItem('counts')
-  theCounts ? (counts.value = JSON.parse(theCounts)) : console.log('filler')
-  console.log(counts.value)
+const storedRanks = sessionStorage.getItem('ranks')
+if (storedRanks) {
+  sets.value = JSON.parse(storedRanks)
+}
+visible.value = sessionStorage.getItem('visible')
+gameEnd.value = sessionStorage.getItem('gameEnd')
+entries.value = Number(sessionStorage.getItem('entries'))
+const theNames = sessionStorage.getItem('nameChoices')
+if (theNames) {
+  nameChoices.value = JSON.parse(theNames)
+}
+
+const theCounts = sessionStorage.getItem('counts')
+if (theCounts) {
+  counts.value = JSON.parse(theCounts)
+}
 })
 </script>

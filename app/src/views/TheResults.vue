@@ -1,20 +1,36 @@
 <template>
-  <div>
-    <button class="bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-800 rounded" @click="restartGame">Restart Game</button>
-    <button class="bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-800 rounded" @click="changeVisiblity">Check Real Ranking</button>
-    <div v-if="visible">
-      <h1>Your ranking</h1>
-      <h1> 1st Place is on the left, 10th place is on the right </h1>
+  <div class="flex flex-col items-center justify-center h-full space-y-6 pt-5">
+    <h1 class="text-5xl text-center"> Final Results </h1>
+    <div class="p-5">
+      <button
+        class="bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-800 rounded"
+        @click="restartGame"
+      >
+        Restart Game
+      </button>
+    </div>
+    <div class="mb-5">
+      <button
+        class="bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-800 rounded mt-10"
+        @click="changeVisiblity"
+      >
+        Check Real Ranking
+      </button>
+    </div>
+    <div v-if="visible" class="text-center mt-4 p-4">
+      <h1 class="text-3xl">Your ranking</h1>
+      <h1 class="text-xl">1st Place is on the left, 10th place is on the right</h1>
       <BarChart :ranks="ranks" :counts="counts" />
     </div>
-    <div v-if="!visible">
-      <h1>Actual ranking</h1>
-      <h1> 1st Place is on the left, 10th place is on the right </h1>
+    
+    <div v-if="!visible" class="text-center mt-4 p-4">
+      <h1 class="text-3xl">Actual ranking</h1>
+      <h1 class="text-xl">1st Place is on the left, 10th place is on the right</h1>
       <BarChart :ranks="sortedRanks" :counts="sortedCounts" />
     </div>
-
   </div>
 </template>
+
 
 <script setup>
 import { ref } from 'vue'
@@ -26,8 +42,7 @@ const router = useRouter()
 const ranks = JSON.parse(sessionStorage.getItem('ranks')) || []
 const counts = JSON.parse(sessionStorage.getItem('counts')) || []
 
-console.log(ranks)
-console.log(counts)
+
 
 const sortedCounts = ref([])
 const sortedRanks = ref([])
@@ -42,8 +57,7 @@ function sortBoth() {
 
   sortedRanks.value = sortedArray.map((item) => item.rank)
   sortedCounts.value = sortedArray.map((item) => item.count)
-  console.log(sortedRanks.value)
-  console.log(sortedCounts.value)
+
 }
 
 sortBoth()

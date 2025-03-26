@@ -1,17 +1,29 @@
 <template>
-  <div>
-    <h1>Data for {{ route.params.nm }}</h1>
-    <div>
-      <router-link class="bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded" :to="goBack"> Back </router-link>
+  <div class="pt-5 flex items-center justify-center min-h-screen">
+  <div class="flex flex-col items-center justify-center">
+    <h1 class="text-5xl mt-50">Data for {{ route.params.nm }}</h1>
+    <div class="p-5">
+      <router-link
+        class="bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded"
+        :to="goBack"
+      >
+        Back
+      </router-link>
     </div>
-    <button class="bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-800 rounded" @click="toggleVisibility">{{ visible ? 'Additional Info' : 'Main Info' }}</button>
+    <button
+      class="bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-800 rounded mb-4"
+      @click="toggleVisibility"
+    >
+      {{ visible ? 'Additional Info' : 'Main Info' }}
+    </button>
     <PolarArea v-if="visible" />
-    <div v-if="invisible">
+    <div v-if="invisible" class="mt-4">
       <h2>Total Amt of {{ route.params.nm }}s: {{ count }}</h2>
       <h5>** Note that the smaller the bar, the higher rank it is</h5>
       <BarChart />
     </div>
   </div>
+</div>
 </template>
 
 <script setup>
@@ -48,9 +60,7 @@ async function getStats() {
       const uniqueEthnicities = data.filter(
         (item, index, self) => index === self.findIndex((t) => t.ethcty === item.ethcty),
       )
-      console.log(uniqueEthnicities)
       countAll(uniqueEthnicities)
-      checkRanks(uniqueEthnicities)
     }
   } catch (error) {
     alert(error)
@@ -64,17 +74,9 @@ function countAll(e) {
   for (let i = 0; i < e.length; i++) {
     count.value = count.value + Number(e[i].cnt)
   }
-  console.log(count.value)
+
 }
 
-function checkRanks(e) {
-  for (let i = 0; i < e.length; i++) {
-    console.log(e[i])
-  }
-  console.log(ranks.value)
-}
 </script>
 
-<style>
-
-</style>
+<style></style>
