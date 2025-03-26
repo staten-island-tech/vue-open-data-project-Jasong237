@@ -50,7 +50,7 @@ let entries = ref(0)
 async function getNames() {
   try {
     const res = await fetch(
-      'https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013&$limit=100',
+      'https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013',
     )
     if (!res.ok) throw new Error(res.statusText)
     const data = await res.json()
