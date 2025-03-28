@@ -34,13 +34,10 @@ export default {
       const res = await fetch(
         `https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013&nm=${route.params.nm}`,
       )
-      console.log('response', res)
       if (res.status > 200) {
         throw new Error(res)
       } else {
         const data = await res.json()
-        console.log(data)
-
         const uniqueEthnicities = data.filter(
           (item, index, self) => index === self.findIndex((t) => t.ethcty === item.ethcty),
         )

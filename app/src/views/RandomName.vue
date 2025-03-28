@@ -15,28 +15,22 @@
       </button>
 
       <div v-if="visible" class="mt-4">
-        <router-link :to="nameInfo" class="text-green-600">
-          Check Stats
-        </router-link>
+        <router-link :to="nameInfo" class="text-green-600"> Check Stats </router-link>
       </div>
       <div>
-      <router-link v-if="gameEnd" to="/results" class="mt-4 text-red-600">
-        End Game
-      </router-link>
-    </div>
+        <router-link v-if="gameEnd" to="/results" class="mt-4 text-red-600"> End Game </router-link>
+      </div>
     </div>
   </div>
 </template>
 
-<style>
-
-</style>
-
+<style></style>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import RankStyle from '@/components/RankStyle.vue'
 
+const status = ref(false)
 const visible = ref(false)
 const gameEnd = ref(false)
 const names = ref([])
@@ -49,9 +43,7 @@ let entries = ref(0)
 
 async function getNames() {
   try {
-    const res = await fetch(
-      'https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013',
-    )
+    const res = await fetch('https://data.cityofnewyork.us/resource/25th-nujf.json?brth_yr=2013')
     if (!res.ok) throw new Error(res.statusText)
     const data = await res.json()
     names.value = data
@@ -61,8 +53,11 @@ async function getNames() {
 }
 
 function startRandomizer() {
-  if (names.value.length === 0) return
+  if (status.value === true) {alert('Dont click too quickly')}
 
+  else {
+  status.value = true
+  sessionStorage.setItem('status', status.value)
   intervalId = setInterval(() => {
     const randomIndex = Math.floor(Math.random() * names.value.length)
     displayName.value = names.value[randomIndex].nm
@@ -76,7 +71,10 @@ function startRandomizer() {
     visible.value = true
     sessionStorage.setItem('visible', visible.value)
     addTotal()
-  }, 2000)
+    status.value = false
+    sessionStorage.setItem('status', status.value)
+   }, 2000)
+  }
 }
 const current = ref([])
 const amount = ref(0)
@@ -88,7 +86,6 @@ async function addTotal() {
     if (!res.ok) throw new Error(res.statusText)
     const data = await res.json()
     current.value = data
-    console.log(current.value)
     const uniqueEthnicities = data.filter(
       (item, index, self) => index === self.findIndex((t) => t.ethcty === item.ethcty),
     )
@@ -102,6 +99,7 @@ function countAll(e) {
   for (let i = 0; i < e.length; i++) {
     amount.value = amount.value + Number(e[i].cnt)
   }
+  sessionStorage.setItem('total', amount.value)
 }
 
 function updateSet(id) {
@@ -131,12 +129,14 @@ function pushName(id) {
     checkProgress()
     nameChoices.value.push(displayName.value)
     sessionStorage.setItem('nameChoices', JSON.stringify(nameChoices.value))
-    counts.value[id] = amount.value
+    counts.value[id] = sessionStorage.getItem('total')
     sessionStorage.setItem('counts', JSON.stringify(counts.value))
   }
   sessionStorage.setItem('ranks', JSON.stringify(sets.value))
   displayName.value = ''
+  amount.value = 0
   visible.value = false
+  sessionStorage.setItem('total', amount.value)
   sessionStorage.setItem('displayName', displayName.value)
   sessionStorage.setItem('visible', visible.value)
 }
@@ -159,21 +159,23 @@ function checkProgress() {
 onMounted(() => {
   getNames()
   displayName.value = sessionStorage.getItem('displayName')
-const storedRanks = sessionStorage.getItem('ranks')
-if (storedRanks) {
-  sets.value = JSON.parse(storedRanks)
-}
-visible.value = sessionStorage.getItem('visible')
-gameEnd.value = sessionStorage.getItem('gameEnd')
-entries.value = Number(sessionStorage.getItem('entries'))
-const theNames = sessionStorage.getItem('nameChoices')
-if (theNames) {
-  nameChoices.value = JSON.parse(theNames)
-}
+  const storedRanks = sessionStorage.getItem('ranks')
+  if (storedRanks) {
+    sets.value = JSON.parse(storedRanks)
+  }
+  amount.value = sessionStorage.getItem('total')
+  status.value = sessionStorage.getItem('status')
+  visible.value = sessionStorage.getItem('visible')
+  gameEnd.value = sessionStorage.getItem('gameEnd')
+  entries.value = Number(sessionStorage.getItem('entries'))
+  const theNames = sessionStorage.getItem('nameChoices')
+  if (theNames) {
+    nameChoices.value = JSON.parse(theNames)
+  }
 
-const theCounts = sessionStorage.getItem('counts')
-if (theCounts) {
-  counts.value = JSON.parse(theCounts)
-}
+  const theCounts = sessionStorage.getItem('counts')
+  if (theCounts) {
+    counts.value = JSON.parse(theCounts)
+  }
 })
 </script>
